@@ -1,0 +1,131 @@
+<div *ngIf="isVisible" class="modal-overlay">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>{{ customer ? 'Editar Cliente' : 'Nuevo Cliente' }}</h2>
+      <button class="close-btn" (click)="onCancel()">&times;</button>
+    </div>
+
+    <form (ngSubmit)="onSubmit()" #customerForm="ngForm" class="form-container">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="nameCustomer">Nombre *</label>
+          <input
+            type="text"
+            id="nameCustomer"
+            [(ngModel)]="formData.nameCustomer"
+            name="nameCustomer"
+            placeholder="ej. Juan"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="lastnameCustomer">Apellido *</label>
+          <input
+            type="text"
+            id="lastnameCustomer"
+            [(ngModel)]="formData.lastnameCustomer"
+            name="lastnameCustomer"
+            placeholder="ej. Garcia"
+            required
+          />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="typeCustomer">Tipo de Cliente *</label>
+          <select id="typeCustomer" [(ngModel)]="formData.typeCustomer" name="typeCustomer" required>
+            <option value="" disabled>Selecciona un tipo</option>
+            <option *ngFor="let type of customerTypes" [value]="type">
+              {{ type }}
+            </option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="phone">Telefono *</label>
+          <input
+            type="tel"
+            id="phone"
+            [(ngModel)]="formData.phone"
+            name="phone"
+            placeholder="+51 999 999 999"
+            required
+          />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="email">Correo *</label>
+          <input
+            type="email"
+            id="email"
+            [(ngModel)]="formData.email"
+            name="email"
+            placeholder="cliente@ejemplo.com"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="address">Direccion</label>
+          <input
+            type="text"
+            id="address"
+            [(ngModel)]="formData.address"
+            name="address"
+            placeholder="Av. Principal 123"
+          />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="documentType">Tipo de Documento *</label>
+          <select id="documentType" [(ngModel)]="formData.documentType" name="documentType" required>
+            <option value="" disabled>Selecciona tipo</option>
+            <option *ngFor="let docType of documentTypes" [value]="docType">
+              {{ docType }}
+            </option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="documentNumber">Numero de Documento *</label>
+          <input
+            type="text"
+            id="documentNumber"
+            [(ngModel)]="formData.documentNumber"
+            name="documentNumber"
+            placeholder="12345678"
+            required
+          />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="idUbigeo">Ubigeo</label>
+          <input
+            type="text"
+            id="idUbigeo"
+            [(ngModel)]="formData.idUbigeo"
+            name="idUbigeo"
+            placeholder="150101"
+          />
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-cancel" (click)="onCancel()">
+          Cancelar
+        </button>
+        <button
+          type="submit"
+          class="btn-register"
+          [disabled]="!isFormValid()"
+        >
+          {{ customer ? 'Actualizar' : 'Registrar' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,15 @@
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    image: sistemagro-frontend:1.0
+    container_name: sistemagro-frontend
+    ports:
+      - "4200:80"
+    networks:
+      - frontend-net
+
+networks:
+  frontend-net:
+    driver: bridge

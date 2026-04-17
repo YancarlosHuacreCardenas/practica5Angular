@@ -1,0 +1,26 @@
+<aside class="sidebar">
+  <!-- Logo -->
+  <div class="sidebar-logo">
+    <div class="logo-icon">
+      <i class="fas fa-leaf"></i>
+    </div>
+    <div class="logo-text">SISTEMAGRO
+    </div>
+  </div>
+
+  <!-- Menu Items -->
+  <nav class="sidebar-menu">
+    <button 
+      *ngFor="let item of menuItems"
+      class="menu-item"
+      [class.active]="activeMenu === item.id"
+      (click)="selectMenu(item.id)"
+      title="{{ item.label }}"
+    >
+      <span class="menu-icon">
+        <i [class]="'fas ' + item.icon"></i>
+      </span>
+      <span class="menu-label">{{ item.label }}</span>
+    </button>
+  </nav>
+</aside>

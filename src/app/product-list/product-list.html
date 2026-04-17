@@ -1,0 +1,167 @@
+<div class="product-list-container">
+  <div class="page-header">
+    <h1>Productos e Insumos</h1>
+    <p class="subtitle">Gestiona el inventario de insumos agrícolas</p>
+  </div>
+
+  <!-- Estadísticas -->
+  <div class="stats-container">
+    <div class="stat-card">
+      <div class="stat-icon active-icon">
+        <i class="fas fa-check-circle"></i>
+      </div>
+      <div class="stat-content">
+        <p class="stat-label">Activos</p>
+        <p class="stat-number">{{ activeCount }}</p>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon inactive-icon">
+        <i class="fas fa-times-circle"></i>
+      </div>
+      <div class="stat-content">
+        <p class="stat-label">Inactivos</p>
+        <p class="stat-number">{{ inactiveCount }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Búsqueda y filtros -->
+  <div class="search-filter-container">
+    <div class="search-box">
+      <input
+        type="text"
+        [(ngModel)]="searchTerm"
+        (input)="onSearchChange()"
+        placeholder="Buscar por nombre de producto..."
+        class="search-input"
+      />
+      <span class="search-icon"><i class="fas fa-search"></i></span>
+    </div>
+
+    <div class="filter-buttons">
+      <button
+        (click)="onFilterChange('todos')"
+        [class.active]="filterStatus === 'todos'"
+        class="filter-btn"
+      >
+        <span class="filter-icon"><i class="fas fa-list"></i></span> Todos
+      </button>
+      <button
+        (click)="onFilterChange('activos')"
+        [class.active]="filterStatus === 'activos'"
+        class="filter-btn"
+      >
+        <span class="filter-icon"><i class="fas fa-check"></i></span> Activos
+      </button>
+      <button
+        (click)="onFilterChange('inactivos')"
+        [class.active]="filterStatus === 'inactivos'"
+        class="filter-btn"
+      >
+        <span class="filter-icon"><i class="fas fa-ban"></i></span> Inactivos
+      </button>
+    </div>
+
+    <button (click)="openNewProductForm()" class="btn-new-product">
+      <span class="btn-icon"><i class="fas fa-plus"></i></span> Nuevo producto
+    </button>
+  </div>
+
+  <!-- Tabla de productos -->
+  <div class="table-container">
+    <div *ngIf="filteredProducts.length > 0; else noProducts">
+      <table class="customers-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Nombre</th>
+            <th>Categoría</th>
+            <th>Precio</th>
+            <th>Unidad</th>
+            <th>Proveedor</th>
+            <th>Stock</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let product of filteredProducts"
+            [class.inactive]="product.estado === 'Inactivo'"
+          >
+            <td>{{ product.idProducto }}</td>
+            <td class="customer-name">
+              <strong>{{ product.nombreProducto }}</strong>
+            </td>
+            <td>{{ product.idCategoria }}</td>
+            <td>S/ {{ product.precio | number:'1.2-2' }}</td>
+            <td>{{ product.unidadMedida }}</td>
+            <td>{{ product.idProveedor }}</td>
+            <td>{{ product.stockDisponible | number:'1.2-2' }}</td>
+            <td>
+              <span
+                class="status-badge"
+                [class.active]="product.estado === 'Activo'"
+                [class.inactive]="product.estado === 'Inactivo'"
+              >
+                {{ product.estado }}
+              </span>
+            </td>
+            <td class="actions">
+              <button
+                class="action-btn edit-btn"
+                (click)="editProduct(product)"
+                title="Editar"
+              >
+                <i class="fas fa-edit"></i>
+              </button>
+              <button
+                *ngIf="product.estado === 'Activo'"
+                class="action-btn delete-btn"
+                (click)="deleteProduct(product.idProducto)"
+                title="Eliminar"
+              >
+                <i class="fas fa-trash-alt"></i>
+              </button>
+              <button
+                *ngIf="product.estado === 'Inactivo'"
+                class="action-btn restore-btn"
+                (click)="restoreProduct(product.idProducto)"
+                title="Restaurar"
+              >
+                <i class="fas fa-undo"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <ng-template #noProducts>
+      <div class="no-data">
+        <p class="no-data-icon"><i class="fas fa-box-open"></i></p>
+        <p class="no-data-title">Sin productos</p>
+        <p class="no-data-description">
+          <ng-container *ngIf="searchTerm">
+            No hay productos que coincidan con tu búsqueda.
+          </ng-container>
+          <ng-container *ngIf="!searchTerm">
+            Agrega tu primer insumo o producto
+          </ng-container>
+        </p>
+        <button (click)="openNewProductForm()" class="btn-new-product btn-secondary">
+          <i class="fas fa-plus"></i> Nuevo producto
+        </button>
+      </div>
+    </ng-template>
+  </div>
+
+  <!-- Formulario modal -->
+  <app-product-form
+    [product]="selectedProduct"
+    [isVisible]="showForm"
+    (close)="onFormClose()"
+    (save)="onFormSave($event)"
+  ></app-product-form>
+</div>

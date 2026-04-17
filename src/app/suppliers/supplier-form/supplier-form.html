@@ -1,0 +1,130 @@
+<div class="modal-overlay" *ngIf="isVisible" (click)="onCancel()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>{{ supplier ? 'Editar Proveedor' : 'Nuevo Proveedor' }}</h2>
+      <button class="close-btn" (click)="onCancel()">×</button>
+    </div>
+
+    <form (ngSubmit)="onSubmit()" class="supplier-form">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="name">Nombre <span class="required">*</span></label>
+          <input
+            id="name"
+            type="text"
+            [(ngModel)]="formData.name"
+            name="name"
+            placeholder="Ej. Semillas del Sur"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="company_name">Empresa <span class="required">*</span></label>
+          <input
+            id="company_name"
+            type="text"
+            [(ngModel)]="formData.company_name"
+            name="company_name"
+            placeholder="Ej. Semillas SAC"
+            required
+          />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="ruc">RUC <span class="required">*</span></label>
+          <input
+            id="ruc"
+            type="text"
+            [(ngModel)]="formData.ruc"
+            name="ruc"
+            placeholder="11 dígitos"
+            maxlength="11"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="tipo">Tipo de Proveedor</label>
+          <select [(ngModel)]="formData.tipo" name="tipo">
+            <option value="">Seleccionar...</option>
+            <option *ngFor="let t of tipos" [value]="t">{{ t }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="contact_name">Persona de Contacto <span class="required">*</span></label>
+          <input
+            id="contact_name"
+            type="text"
+            [(ngModel)]="formData.contact_name"
+            name="contact_name"
+            placeholder="Ej. Juan Pérez"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="phone">Teléfono <span class="required">*</span></label>
+          <input
+            id="phone"
+            type="text"
+            [(ngModel)]="formData.phone"
+            name="phone"
+            placeholder="+54 9 11..."
+            required
+          />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="email">Correo Electrónico <span class="required">*</span></label>
+          <input
+            id="email"
+            type="email"
+            [(ngModel)]="formData.email"
+            name="email"
+            placeholder="proveedor@ejemplo.com"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="status">Estado</label>
+          <select [(ngModel)]="formData.status" name="status">
+            <option *ngFor="let s of statuses" [value]="s">{{ s }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group full-width">
+        <label for="address">Dirección</label>
+        <input
+          id="address"
+          type="text"
+          [(ngModel)]="formData.address"
+          name="address"
+          placeholder="Ej. Av. Principal 123, Ciudad"
+        />
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-cancel" (click)="onCancel()">
+          Cancelar
+        </button>
+        <button
+          type="submit"
+          class="btn-submit"
+          [disabled]="!isFormValid()"
+        >
+          {{ supplier ? 'Actualizar' : 'Crear Proveedor' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,168 @@
+<div class="supplier-list-container">
+  <div class="page-header">
+    <h1>Proveedores</h1>
+    <p class="subtitle">Administra tus proveedores de insumos agrícolas</p>
+  </div>
+
+  <!-- Estadísticas -->
+  <div class="stats-container">
+    <div class="stat-card">
+      <div class="stat-icon active-icon">
+        <i class="fas fa-check-circle"></i>
+      </div>
+      <div class="stat-content">
+        <p class="stat-label">Activos</p>
+        <p class="stat-number">{{ activeCount }}</p>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon inactive-icon">
+        <i class="fas fa-times-circle"></i>
+      </div>
+      <div class="stat-content">
+        <p class="stat-label">Inactivos</p>
+        <p class="stat-number">{{ inactiveCount }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Búsqueda y filtros -->
+  <div class="search-filter-container">
+    <div class="search-box">
+      <input
+        type="text"
+        [(ngModel)]="searchTerm"
+        (input)="onSearchChange()"
+        placeholder="Buscar por nombre, empresa, RUC o contacto..."
+        class="search-input"
+      />
+      <span class="search-icon"><i class="fas fa-search"></i></span>
+    </div>
+
+    <div class="filter-buttons">
+      <button
+        (click)="onFilterChange('todos')"
+        [class.active]="filterStatus === 'todos'"
+        class="filter-btn"
+      >
+        <span class="filter-icon"><i class="fas fa-list"></i></span> Todos
+      </button>
+      <button
+        (click)="onFilterChange('activos')"
+        [class.active]="filterStatus === 'activos'"
+        class="filter-btn"
+      >
+        <span class="filter-icon"><i class="fas fa-check"></i></span> Activos
+      </button>
+      <button
+        (click)="onFilterChange('inactivos')"
+        [class.active]="filterStatus === 'inactivos'"
+        class="filter-btn"
+      >
+        <span class="filter-icon"><i class="fas fa-ban"></i></span> Inactivos
+      </button>
+    </div>
+
+    <button (click)="openNewSupplierForm()" class="btn-new-supplier">
+      <span class="btn-icon"><i class="fas fa-plus"></i></span> Nuevo proveedor
+    </button>
+  </div>
+
+  <!-- Tabla de proveedores -->
+  <div class="table-container">
+    <div *ngIf="filteredSuppliers.length > 0; else noSuppliers">
+      <table class="suppliers-table">
+        <thead>
+          <tr>
+            <th>Empresa</th>
+            <th>Persona de Contacto</th>
+            <th>RUC</th>
+            <th>Teléfono</th>
+            <th>Email</th>
+            <th>Tipo</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let supplier of filteredSuppliers" [class.inactive]="supplier.status === 'Inactivo'">
+            <td class="supplier-name">
+              <strong>{{ supplier.company_name }}</strong>
+              <small>{{ supplier.name }}</small>
+            </td>
+            <td>{{ supplier.contact_name }}</td>
+            <td>{{ supplier.ruc }}</td>
+            <td>{{ supplier.phone }}</td>
+            <td>{{ supplier.email }}</td>
+            <td>
+              <span class="type-badge">{{ supplier.tipo }}</span>
+            </td>
+            <td>
+              <span
+                class="status-badge"
+                [class.active]="supplier.status === 'Activo'"
+                [class.inactive]="supplier.status === 'Inactivo'"
+              >
+                {{ supplier.status }}
+              </span>
+            </td>
+            <td class="actions">
+              <button
+                class="action-btn edit-btn"
+                (click)="editSupplier(supplier)"
+                title="Editar"
+              >
+                <i class="fas fa-edit"></i>
+              </button>
+              <button
+                *ngIf="supplier.status === 'Activo'"
+                class="action-btn delete-btn"
+                (click)="deleteSupplier(supplier.id_supplier)"
+                title="Eliminar"
+              >
+                <i class="fas fa-trash-alt"></i>
+              </button>
+              <button
+                *ngIf="supplier.status === 'Inactivo'"
+                class="action-btn restore-btn"
+                (click)="restoreSupplier(supplier.id_supplier)"
+                title="Restaurar"
+              >
+                <i class="fas fa-undo"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <ng-template #noSuppliers>
+      <div class="no-data">
+        <p class="no-data-icon"><i class="fas fa-handshake"></i></p>
+        <p class="no-data-title">No hay proveedores</p>
+        <p class="no-data-description">
+          <ng-container *ngIf="searchTerm">
+            No hay proveedores que coincidan con tu búsqueda.
+          </ng-container>
+          <ng-container *ngIf="!searchTerm">
+            Agrega tu primer proveedor para comenzar
+          </ng-container>
+        </p>
+        <button
+          (click)="openNewSupplierForm()"
+          class="btn-new-supplier btn-secondary"
+        >
+          <i class="fas fa-plus"></i> Nuevo proveedor
+        </button>
+      </div>
+    </ng-template>
+  </div>
+
+  <!-- Formulario modal -->
+  <app-supplier-form
+    [supplier]="selectedSupplier"
+    [isVisible]="showForm"
+    (close)="onFormClose()"
+    (save)="onFormSave($event)"
+  ></app-supplier-form>
+</div>

@@ -1,0 +1,105 @@
+<div *ngIf="isVisible" class="modal-overlay">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>{{ product ? 'Editar producto' : 'Nuevo producto/insumo' }}</h2>
+      <button class="close-btn" (click)="onCancel()">&times;</button>
+    </div>
+
+    <form (ngSubmit)="onSubmit()" #productForm="ngForm" class="form-container">
+
+      <div class="form-row">
+        <div class="form-group full-width">
+          <label>Nombre *</label>
+          <input
+            type="text"
+            [(ngModel)]="formData.nombreProducto"
+            name="nombreProducto"
+            placeholder="Ej. Urea 46%"
+            required
+          />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Categoría</label>
+          <select [(ngModel)]="formData.idCategoria" name="idCategoria" required>
+            <option [value]="0" disabled>Selecciona...</option>
+            <option [value]="1">Fertilizantes</option>
+            <option [value]="2">Semillas</option>
+            <option [value]="3">Pesticidas</option>
+            <option [value]="4">Herramientas</option>
+            <option [value]="5">Otros</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Unidad</label>
+          <select [(ngModel)]="formData.unidadMedida" name="unidadMedida" required>
+            <option value="" disabled>Unidad...</option>
+            <option *ngFor="let u of unidades" [value]="u">{{ u }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Stock actual</label>
+          <input
+            type="number"
+            step="0.01"
+            [(ngModel)]="formData.stockDisponible"
+            name="stockDisponible"
+            placeholder="0"
+          />
+        </div>
+        <div class="form-group">
+          <label>Precio unitario (S/)</label>
+          <input
+            type="number"
+            step="0.01"
+            [(ngModel)]="formData.precio"
+            name="precio"
+            placeholder="0.04"
+            required
+          />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Proveedor</label>
+          <select [(ngModel)]="formData.idProveedor" name="idProveedor" required>
+            <option [value]="0" disabled>Sin proveedor</option>
+            <option [value]="1">Proveedor 1</option>
+            <option [value]="2">Proveedor 2</option>
+            <option [value]="3">Proveedor 3</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Estado</label>
+          <div class="toggle-container">
+            <span>{{ estadoActivo ? 'Activo' : 'Inactivo' }}</span>
+            <label class="toggle-switch">
+              <input
+                type="checkbox"
+                [(ngModel)]="estadoActivo"
+                name="estado"
+              />
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-cancel" (click)="onCancel()">
+          Cancelar
+        </button>
+        <button type="submit" class="btn-register" [disabled]="!isFormValid()">
+          {{ product ? 'Actualizar' : 'Crear producto' }}
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>
